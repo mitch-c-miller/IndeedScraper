@@ -2,9 +2,7 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-# add CLI args to allow for more specific 
-
-# 
+# string init for cli args
 job_title_search = String.new
 job_location = String.new
 
@@ -12,6 +10,7 @@ job_location = String.new
 counter = 0
 cache = Array.new
 
+# cli args to allow for more in-depth searches
 ARGV.each do |arg|
   if ARGV[0] == "sd"
     job_title_search = "software+developer"
@@ -45,10 +44,10 @@ while counter <= 3
 
     if cache.include?(full_job) == false
       cache << full_job
-      # puts "#{job_title} - #{job_company}"
+      puts "#{job_title} - #{job_company}"
     end
   end
-  puts url
+  # puts url
 
   puts ""
 end
