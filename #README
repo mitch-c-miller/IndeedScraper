@@ -1,0 +1,5 @@
+#README
+
+Job board scraping script that will save links and/or automatically apply to jobs that are relevant. Will be using the *Mechanize* gem to automate web interactions to only save relevant postings. Currently only scrapes with *nokogiri*.
+
+Uses Do-Whatever-You-Want-With-It License. 2016-08-12
