@@ -34,12 +34,11 @@ end
 
 while counter <= 3
   url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
-  counter += 1
+  
   doc = Nokogiri::HTML(open(url))
   
   # can't put in if loop to only perform once for some reason
   page = agent.get(url)
-
   current_page = agent.page.uri
   puts current_page
 
@@ -59,4 +58,5 @@ while counter <= 3
   end
   
   puts ""
+  counter += 1
 end

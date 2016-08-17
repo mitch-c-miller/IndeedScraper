@@ -52,7 +52,7 @@ while counter <= 3
 
     if cache.include?(full_job) == false
       cache << full_job
-      "#{job_title} - #{job_company}"
+      puts full_job
     end
 
   end
