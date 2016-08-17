@@ -9,7 +9,7 @@ require 'time'
   # css is not reliable
 # 3. scrape page
 class JobPostingPage
-  def get_url(setup_url, link_title, mech_agent)  
+  def get_url(setup_url, link_title, mech_agent, out)
     # initial page setup
     page = mech_agent.get(setup_url)
     @current_page = mech_agent.page.uri
@@ -18,12 +18,12 @@ class JobPostingPage
     begin
       mech_agent.current_page.link_with(:text => link_title).click      
       @posting_page = mech_agent.page.uri
-      puts @posting_page
+      out.puts @posting_page
     rescue
       # caused by regex error; usually due to french accents
-      puts "Clicking Error"
+      out.puts "Clicking Error"
     end
-    puts ""
+    out.puts ""
   end
 end
 
@@ -59,6 +59,9 @@ ARGV.each do |arg|
   end
 end
 
+# output file
+out = File.open("job_output.txt", "w")
+
 while counter <= 2
   url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
   doc = Nokogiri::HTML(open(url))
@@ -76,10 +79,10 @@ while counter <= 2
     # avoids redundant searches
     if cache.include?(full_job) == false
       cache << full_job
-      puts "#{job_title} - #{job_company}"
+      out.puts "#{job_title} - #{job_company}"
 
       job_link = JobPostingPage.new
-      job_link.get_url(url, job_title, agent)
+      job_link.get_url(url, job_title, agent, out)
     end
   end
   counter += 1
