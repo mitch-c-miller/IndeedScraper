@@ -34,8 +34,10 @@ ARGV.each do |arg|
 end
 
 # output file
+Dir.chdir("./Results")
 time = Time.new
-out = File.open(time.strftime("%Y-%m-%d") << ".txt", "w")
+# file_path = "./Results" << ARGV[0].dup << ARGV[1].dup << time.strftime("%Y-%m-%d") << ".txt"
+out = File.open(ARGV[0].dup << ARGV[1].dup << time.strftime("%Y-%m-%d") << ".txt", "w")
 
 while counter <= 2
   url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
