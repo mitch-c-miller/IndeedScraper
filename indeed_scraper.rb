@@ -1,6 +1,31 @@
 require 'rubygems'
 require 'mechanize'
 require 'open-uri'
+require 'time'
+
+# order of operations
+# 1. instantiate class
+# 2. class opens assigned link based on search for link title
+  # css is not reliable
+# 3. scrape page
+class JobPostingPage
+  def get_url(setup_url, link_title, mech_agent)  
+    # initial page setup
+    page = mech_agent.get(setup_url)
+    @current_page = mech_agent.page.uri
+
+    # clicks page
+    begin
+      mech_agent.current_page.link_with(:text => link_title).click      
+      @posting_page = mech_agent.page.uri
+      puts @posting_page
+    rescue
+      # caused by regex error; usually due to french accents
+      puts "Clicking Error"
+    end
+    puts ""
+  end
+end
 
 # var init; url segments, saved cache, and loop counter setup
 job_title_search = String.new
@@ -34,27 +59,28 @@ ARGV.each do |arg|
   end
 end
 
-while counter <= 3
+while counter <= 2
   url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
-  counter += 1
+  doc = Nokogiri::HTML(open(url))
 
   # init mechanize for each new page of results
   page = agent.get(url)
   current_page = agent.page.uri
 
   # scraping segment; gets job title and company; outputs to console
-  doc = Nokogiri::HTML(open(url))
   doc.css(".result").each do |item|
-    job_title = item.at_css(".jobtitle").text[/[^\s][a-zA-Z -]*/]
-    job_company = item.at_css(".company").text[/[^\s][a-zA-Z -]*/]
-
+    job_title = item.at_css(".jobtitle").text[/[^\s][a-zA-Z0-9 -.\/\–\\]*/]
+    job_company = item.at_css(".company").text[/[^\s][a-zA-Z0-9 -.\/ \–\\]*/]
     full_job = job_title + " - " + job_company
 
+    # avoids redundant searches
     if cache.include?(full_job) == false
       cache << full_job
-      puts full_job
-    end
+      puts "#{job_title} - #{job_company}"
 
+      job_link = JobPostingPage.new
+      job_link.get_url(url, job_title, agent)
+    end
   end
-  puts ""
+  counter += 1
 end

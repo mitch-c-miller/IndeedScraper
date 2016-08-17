@@ -8,18 +8,15 @@ require 'open-uri'
   # css is not reliable
 # 3. scrape page
 class JobPostingPage
-  
-  # add resulting url
-  def get_url(setup_url, link_title)
-    # mechanize setup
-    agent = Mechanize.new { |agent|
-      agent.user_agent_alias = 'Mac Safari'
-    }  
-      page = agent.get(setup_url)
-      @current_page = agent.page.uri
+  def get_url(setup_url, link_title, mech_agent)  
+    # initial page setup
+    page = mech_agent.get(setup_url)
+    @current_page = mech_agent.page.uri
+
+    # clicks page
     begin
-      agent.current_page.link_with(:text => link_title).click      
-      @posting_page = agent.page.uri
+      mech_agent.current_page.link_with(:text => link_title).click      
+      @posting_page = mech_agent.page.uri
       puts @posting_page
     rescue
       puts "Clicking Error"
@@ -35,14 +32,14 @@ url = "http://www.indeed.ca/jobs?q=junior+developer&l=Ottawa,+ON&start=0"
 
 doc = Nokogiri::HTML(open(url))
 
-# # can't put in if loop to only perform once for some reason
-# page = agent.get(url)
-# current_page = agent.page.uri
-# puts current_page
+# mechanize setup
+agent = Mechanize.new { |agent|
+  agent.user_agent_alias = 'Mac Safari'
+}  
 
 doc.css(".result").each do |item|
-  job_title = item.at_css(".jobtitle").text[/[^\s][a-zA-Z -.\/]*/]
-  job_company = item.at_css(".company").text[/[^\s][a-zA-Z -.\/]*/]
+  job_title = item.at_css(".jobtitle").text[/[^\s][a-zA-Z0-9 -.\/ \–]*/]
+  job_company = item.at_css(".company").text[/[^\s][a-zA-Z0-9 -.\/ \–]*/]
   full_job = job_title + " - " + job_company
 
   if cache.include?(full_job) == false
@@ -50,6 +47,6 @@ doc.css(".result").each do |item|
     puts "#{job_title} - #{job_company}"
 
     job_link = JobPostingPage.new
-    job_link.get_url(url, job_title)
+    job_link.get_url(url, job_title, agent)
   end
 end
