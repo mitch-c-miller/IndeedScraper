@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'mechanize'
 
 search_terms =  ['steve jobs', 'henry ford', 'andrew carnegie']
