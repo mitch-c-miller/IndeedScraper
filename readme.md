@@ -21,5 +21,9 @@
 * Parse results from main body based on words in files
 	* words in `exclude.txt` will result in pages including x of them to not be saved
 	* words in `special.txt` will result in pages including x of them to be specially marked
+* Host scripts on github pages
+	* Easier to use
+	* Easier to show off
+	* Can be used without ruby installed
 
 Uses Do-Whatever-You-Want-With-It License. 2016-08-17
