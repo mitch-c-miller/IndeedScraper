@@ -1,5 +1,5 @@
 require './job_posting_page'
-require 'time'
+require './file_manager'
 
 # var init; url segments, saved cache, and loop counter setup
 job_title_search = String.new
@@ -33,12 +33,9 @@ ARGV.each do |arg|
   end
 end
 
-# output file
-Dir.chdir("./Results")
-time = Time.new
-# file_path = "./Results" << ARGV[0].dup << ARGV[1].dup << time.strftime("%Y-%m-%d") << ".txt"
-out = File.open(ARGV[0].dup << ARGV[1].dup << time.strftime("%Y-%m-%d") << ".txt", "w")
+output = FileManager.file_output('indeed')
 
+# iterates through multiple pages
 while counter <= 2
   url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
   doc = Nokogiri::HTML(open(url))
@@ -60,6 +57,7 @@ while counter <= 2
 
       job_link = JobPostingPage.new
       job_link.get_url(url, job_title, agent, out)
+      job_link.parse(filter_in, filter_out)
     end
   end
   counter += 1

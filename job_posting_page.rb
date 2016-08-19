@@ -1,5 +1,6 @@
-require 'rubygems'
+# require './indeed_post_parse'
 require 'mechanize'
+require 'rubygems'
 require 'open-uri'
 
 # order of operations
@@ -8,20 +9,27 @@ require 'open-uri'
   # css is not reliable
 # 3. scrape page
 class JobPostingPage
-  def get_url(setup_url, link_title, mech_agent, out)
+  def get_url(url, link, agent, output)
     # initial page setup
-    page = mech_agent.get(setup_url)
-    @current_page = mech_agent.page.uri
+    page = agent.get(url)
+    @current_page = agent.page.uri
 
     # clicks page
     begin
-      mech_agent.current_page.link_with(:text => link_title).click      
-      @posting_page = mech_agent.page.uri
-      out.puts @posting_page
+      agent.current_page.link_with(:text => link).click      
+      @posting_page = agent.page.uri
+      output.puts @posting_page
     rescue
       # caused by regex error; usually due to french accents
-      out.puts "Clicking Error"
+      output.puts "Clicking Error"
     end
-    out.puts ""
+    output.puts ""
   end
+
+  # fitler_in - if #X detected, mark posting as high priority
+  # filter_out - if #Y detected, remove posting
+  def parse(filter_in, filter_out)
+    
+  end
+
 end
