@@ -58,6 +58,7 @@ while counter <= 2
   current_page = agent.page.uri
 
   # scraping segment; gets job title and company
+  # TODO: replace with pure HTML and httparty
   doc.css(".result").each do |item|
     job_title = item.at_css(".jobtitle").text[/[^\s][a-zA-Z0-9 -.\/\–\\]*/]
     job_company = item.at_css(".company").text[/[^\s][a-zA-Z0-9 -.\/ \–\\]*/]

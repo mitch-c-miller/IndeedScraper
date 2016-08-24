@@ -22,4 +22,4 @@
 	* words in `exclude.txt` will result in pages including x of them to not be saved
 	* words in `special.txt` will result in pages including x of them to be specially marked
 
-Uses Do-Whatever-You-Want-With-It License. 2016-08-17
+Usable under BSD-3 License. 2016-08-24
