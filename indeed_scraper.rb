@@ -50,7 +50,7 @@ f = out.file_output(ARGV[0].dup, ARGV[1].dup, ARGV[2].dup)
 
 # iterates through multiple pages
 while counter <= 2
-  url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s
+  url = "http://www.indeed.ca/jobs?q=" << job_title_search << "&l=" << job_location << ",+ON&start=" << (counter * 20).to_s << "&sort=date"
   doc = Nokogiri::HTML(open(url))
 
   # prep mechanize for each new page of results
@@ -70,7 +70,7 @@ while counter <= 2
 
       job_link = JobPostingPage.new
       job_link.get_url(url, job_title, agent, f)
-      job_link.parse(filter_in, filter_out)
+      # job_link.parse(filter_in, filter_out)
     end
   end
   counter += 1

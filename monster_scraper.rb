@@ -1,4 +1,13 @@
-require 'httparty'
+=begin
+***************************************************************************
+Monster Jobs API
 
-# sample url
-# http://www.monster.ca/jobs/search/?q=software-developer&where=Ottawa__2C-Ontario&sort=dt.rv.di
+API doc at http://partner.monster.com/job-search-specification
+sample url
+http://jsx.monster.com/query.ashx?q=ado+vb+sql&cat=your+cat=&rev=2.0
+
+return schema (XML)
+http://schemas.monster.com/Current/XSD/Search/JobSearchQueryResults.xsd
+***************************************************************************
+=end
+require 'open-uri'
